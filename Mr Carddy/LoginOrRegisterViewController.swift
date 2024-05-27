@@ -67,7 +67,7 @@ class LoginOrRegisterViewController: UIViewController {
                         // success
                         // todo make player and store his data to firebase database
                         guard let uid = authResult?.user.uid else{return}
-                        var player = Player(uid: uid, name: self.username.text!,email: self.email.text!, avatar: self.selectedAvaterImage, level: 1, coins: 500)
+                        var player = Player(uid: uid, name: self.username.text!,email: self.email.text!, avatar: self.selectedAvaterImage, level: 1, coins: 500, numberOfCardInGame: 15)
                         
                         self.ref.child("players").child(player.uid).setValue(player.dict) { error, ref in
                             if(error == nil){

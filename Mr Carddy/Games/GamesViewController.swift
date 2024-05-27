@@ -10,13 +10,15 @@ import FirebaseCore
 import Firebase
 import FirebaseAuth
 import FirebaseDatabase
+import AVFoundation
 
 
 class GamesViewController: UIViewController {
    static var player:Player?
-    
+    let playViewController = PlayViewController()
     
     @IBAction func joinGameTapped(_ sender: Any) {
+        playViewController.playAduio(name: "Click")
         
         showInputDialog(title: "Join Game",
                         subtitle: "Please enter the code game number below.",
@@ -70,6 +72,7 @@ class GamesViewController: UIViewController {
     }
     
     @IBAction func createGameTapped(_ sender: Any) {
+     // playViewController.playAduio(name: "Click")
         let viewController = self.storyboard?.instantiateViewController(withIdentifier: "CreateGameViewController")
                
                if let presentationController = viewController!.presentationController as? UISheetPresentationController {
@@ -144,16 +147,16 @@ class GamesViewController: UIViewController {
 
           // ...
         }) { error in
-          print(error.localizedDescription)
+          print("😡😡😡😡😡😡",error.localizedDescription)
         }
         
         
 
         
-        let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(avatarImageTapped(tapGestureRecognizer:)))
-        avatarImage.isUserInteractionEnabled = true
-        avatarImage.addGestureRecognizer(tapGestureRecognizer)
-        
+//        let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(avatarImageTapped(tapGestureRecognizer:)))
+//        avatarImage.isUserInteractionEnabled = true
+//        avatarImage.addGestureRecognizer(tapGestureRecognizer)
+//
         // Do any additional setup after loading the view.
     }
     
@@ -171,15 +174,7 @@ class GamesViewController: UIViewController {
 
     }
 
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
-    }
-    */
+    
 
 }
 

@@ -4,7 +4,6 @@
 //
 //  Created by Bsmah Ali on 5/15/24.
 //
-
 import Foundation
 
 
@@ -24,14 +23,16 @@ class Player: Encodable {
         level = aDict["level"] as? Int ?? 0
        coins = aDict["coins"] as? Int ?? 0
         email = aDict["email"] as? String ?? ""
+        numberOfCardInGame = aDict["numberOfCardInGame"] as? Int ?? 0
        }
-    init(uid: String, name: String,email:String, avatar: String, level: Int, coins: Int) {
+    init(uid: String, name: String,email:String, avatar: String, level: Int, coins: Int,numberOfCardInGame: Int) {
         self.uid = uid
         self.name = name
         self.avatar = avatar
         self.level = level
         self.coins = coins
         self.email = email
+        self.numberOfCardInGame = numberOfCardInGame
     }
     init(){}
     

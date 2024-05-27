@@ -11,6 +11,8 @@ import Firebase
 
 class CreateGameViewController: UIViewController {
     var coinsCount:Int = 0
+    
+    let playViewController = PlayViewController()
 
     @IBAction func generateTapped(_ sender: Any) {
         codeLabel.text = "\(Int.randomNumberWith(digits: 6))"
@@ -36,12 +38,15 @@ class CreateGameViewController: UIViewController {
         
         
         coinsLabel.text = "\(coinsCount) coins"
-        let minTapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(minTapTapped(tapGestureRecognizer:)))
+        let minTapGestureRecognizer = UITapGestureRecognizer(target: self, action:
+        #selector(minTapTapped(tapGestureRecognizer:)))
+        playViewController.playAduio(name: "Click")
         min.isUserInteractionEnabled = true
         min.addGestureRecognizer(minTapGestureRecognizer)
         
         
         let plusTapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(plusTapTapped(tapGestureRecognizer:)))
+        playViewController.playAduio(name: "Click")
         plus.isUserInteractionEnabled = true
         plus.addGestureRecognizer(plusTapGestureRecognizer)
 
@@ -71,6 +76,7 @@ class CreateGameViewController: UIViewController {
 //        }
     }
     @IBAction func createTapped(_ sender: Any) {
+        playViewController.playAduio(name: "Click")
         if(codeLabel.text! != "code"){
             var players:[String:Player] =  [:]
             // this is new way to add player by his id

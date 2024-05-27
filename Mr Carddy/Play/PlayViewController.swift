@@ -3,16 +3,19 @@
 //  Mr Carddy
 //
 //  Created by Bsmah Ali on 5/18/24.
-//
 
-import UIKit
+
 import Firebase
 import FirebaseDatabase
-
+import AVFoundation
+import UIKit
 
 class PlayViewController: UIViewController {
     var sahbaCards:[Card] = []
     var game:Game?
+    var player: AVAudioPlayer?
+    
+
     var cards : [Card] = []
     var cardsAllCard : [Card] = [
         Card(c_name: "Card1", photo1: nil, photo2: nil, especially: .Skip),
@@ -109,7 +112,7 @@ class PlayViewController: UIViewController {
     var isFisrtTime = false
     var ids:[String] = []
     var selectedCard:Card?
-    var seconds = 5
+    var seconds = 40
     var myTimer: Timer?
     
     @objc func closeTapped(tapGestureRecognizer: UITapGestureRecognizer)
@@ -132,6 +135,9 @@ class PlayViewController: UIViewController {
 
         // Do any additional setup after loading the view.
         
+        //playAduio(name: "start")
+        
+        //
         
         let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(closeTapped(tapGestureRecognizer:)))
         close.isUserInteractionEnabled = true
@@ -166,7 +172,7 @@ class PlayViewController: UIViewController {
                     let firstKey = Array(tempDic.keys)[0] // or .first
                     self.player1 = tempDic[firstKey]
                     self.player1Name.text = self.player1?.name
-                    self.numberOfCardPlayer1.text = "\(self.player1!.numberOfCardInGame)1"
+                    self.numberOfCardPlayer1.text = "\(self.player1!.numberOfCardInGame)"
                     self.player1Level.text = "\(self.player1!.level)"
                     self.avatarPlayer1Image.image = UIImage(named: self.player1!.avatar)
                 }else if(self.game!.players.count == 1){
@@ -174,6 +180,16 @@ class PlayViewController: UIViewController {
                 }
                 
                // self.ids =  Array(self.game!.players.keys)
+//            }
+            
+            
+//            //make numer of card realtiem
+//
+//            Database.database().reference().child("games").child(self.game!.id).child("players").child(self.player1!.uid).observe(.value) { snapshot in
+//                guard let dic = snapshot.value as? [String : AnyObject] else {return}
+////                self.player1 = Player(aDict: dic)
+////                self.numberOfCardPlayer1.text = "\(self.player1!.numberOfCardInGame)"
+//                print("numberOfCardInGame ==> \(dic)")
 //            }
                 
             if self.game!.curentPlayer == GamesViewController.player!.uid{
@@ -186,7 +202,9 @@ class PlayViewController: UIViewController {
             
             //show winer message
             if self.game!.winerId == GamesViewController.player!.uid {
+                
                 let showAlert = UIAlertController(title: "You Did it", message: "Congratulations on your win \(self.game!.coins)" , preferredStyle: .alert)
+              
                 let imageView = UIImageView(frame: CGRect(x: 10, y: 100, width: 90, height: 90))
                 imageView.image = UIImage(named: "winner") // Your image here...
                 showAlert.view.addSubview(imageView)
@@ -195,7 +213,7 @@ class PlayViewController: UIViewController {
                 showAlert.view.addConstraint(height)
                 showAlert.view.addConstraint(width)
                 showAlert.addAction(UIAlertAction(title: "OK", style: .default, handler: { action in
-                    // your actions here...
+                   // self.playViewController.playAduio(name: "Winner")
                     // add coins to me
                     GamesViewController.player!.coins  += self.game!.coins
                     Database.database().reference().child("players").child(GamesViewController.player!.uid).child("coins").setValue(GamesViewController.player!.coins)
@@ -206,6 +224,7 @@ class PlayViewController: UIViewController {
                 // show lose message
                 
                 let showAlert = UIAlertController(title: "Game Over", message: "The game is over and you have lost" , preferredStyle: .alert)
+                
                 let imageView = UIImageView(frame: CGRect(x: 10, y: 100, width: 90, height: 90))
                 imageView.image = UIImage(named: "loser") // Your image here...
                 showAlert.view.addSubview(imageView)
@@ -215,6 +234,7 @@ class PlayViewController: UIViewController {
                 showAlert.view.addConstraint(width)
                 showAlert.addAction(UIAlertAction(title: "OK", style: .cancel, handler: { action in
                     // your actions here...
+                    //self.playViewController.playAduio(name: "gameOver")
                     self.dismiss(animated: true)
                     
                 }))
@@ -228,43 +248,44 @@ class PlayViewController: UIViewController {
             
             
             //show count down
-      /*  if self.game!.curentPlayer == GamesViewController.player!.uid{
-       
-       
-       self.seconds = 50
+            if self.game!.curentPlayer == GamesViewController.player!.uid{
+                self.playAduio(name: "Timer")
 
-        self.myTimer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { [weak self] timer in
-                    self?.seconds -= 1
-                    if self?.seconds == 0 {
-                        self?.showAlert(message: "Go!")
-                        self?.addWhenTimeFinish()
-                        self?.countDownMainPlayer.isHidden = true
-                        self?.player1CoundDown.isHidden = false
-                        self?.myTimer!.invalidate()
-                   } else if let seconds = self?.seconds {
-                        self?.countDownMainPlayer.text = "\(seconds)"
-                    }
-                }
-       
-    }else {
-        self.countDownMainPlayer.isHidden = true
-       self.player1CoundDown.isHidden = false
-        
-        self.seconds = 50
 
-        self.myTimer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { [weak self] timer in
-                    self?.seconds -= 1
-                    if self?.seconds == 0 {
-                        //self?.showAlert(message: "Go!")
-                        self?.addWhenTimeFinish()
-                        self?.countDownMainPlayer.isHidden = false
-                        self?.player1CoundDown.isHidden = true
-                        self?.myTimer!.invalidate()
-                    } else if let seconds = self?.seconds {
-                        self?.player1CoundDown.text = "\(seconds)"
-                    }
-                }
-    }*/
+                self.seconds = 40
+
+                self.myTimer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { [weak self] timer in
+                            self?.seconds -= 1
+                            if self?.seconds == 0 {
+                                self?.showAlert(message: "Go!")
+                                self?.addWhenTimeFinish()
+                                self?.countDownMainPlayer.isHidden = true
+                                self?.player1CoundDown.isHidden = false
+                                self?.myTimer!.invalidate()
+                            } else if let seconds = self?.seconds {
+                                self?.countDownMainPlayer.text = "\(seconds)"
+                            }
+                        }
+
+            }else {
+                self.countDownMainPlayer.isHidden = true
+                self.player1CoundDown.isHidden = false
+
+                self.seconds = 40
+
+                self.myTimer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { [weak self] timer in
+                            self?.seconds -= 1
+                            if self?.seconds == 0 {
+                                self?.showAlert(message: "Go!")
+                                self?.addWhenTimeFinish()
+                                self?.countDownMainPlayer.isHidden = false
+                                self?.player1CoundDown.isHidden = true
+                                self?.myTimer!.invalidate()
+                            } else if let seconds = self?.seconds {
+                                self?.player1CoundDown.text = "\(seconds)"
+                            }
+                        }
+            }
             
             //show last card
             if(!self.game!.lastCard!.c_name.isEmpty){
@@ -390,6 +411,7 @@ class PlayViewController: UIViewController {
     }
     
     @IBAction func addTapped(_ sender: Any) {
+        playAduio(name: "sahba")
         if(game!.curentPlayer == GamesViewController.player!.uid){
             cards.append(sahbaCards[Int.random(in: 1...150)])
             
@@ -403,6 +425,7 @@ class PlayViewController: UIViewController {
 
     var specialCardCount = 0
     @IBAction func playTapped(_ sender: Any) {
+        playAduio(name: "buttons")
         
         if self.game!.curentPlayer == GamesViewController.player!.uid{
             
@@ -430,6 +453,7 @@ class PlayViewController: UIViewController {
     }
     
     @IBAction func returnTapped(_ sender: Any) {
+        playAduio(name: "sahba")
         if(selectedCard != nil){
             cards.append(self.selectedCard!)
             selectedCard = nil
@@ -441,21 +465,34 @@ class PlayViewController: UIViewController {
         
         
     }
-    /*
-    // MARK: - Navigation
+    func playAduio(name:String){
+        guard let url = Bundle.main.url(forResource: name, withExtension: "mp3") else { return }
 
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
+            do {
+                try AVAudioSession.sharedInstance().setCategory(.playback, mode: .default)
+                try AVAudioSession.sharedInstance().setActive(true)
+
+                /* The following line is required for the player to work on iOS 11. Change the file type accordingly*/
+                player = try AVAudioPlayer(contentsOf: url, fileTypeHint: AVFileType.mp3.rawValue)
+
+                /* iOS 10 and earlier require the following line:
+                player = try AVAudioPlayer(contentsOf: url, fileTypeHint: AVFileTypeMPEGLayer3) */
+
+                guard let player = player else { return }
+
+                player.play()
+
+            } catch let error {
+                print(error.localizedDescription)
+            }
     }
-    */
 
 }
 extension PlayViewController : UICollectionViewDelegate , UICollectionViewDataSource{
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return cards.count
     }
+
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "CardCollectionViewCell", for: indexPath) as! CardCollectionViewCell
@@ -524,7 +561,7 @@ extension PlayViewController : UICollectionViewDelegate , UICollectionViewDataSo
     
 }
 extension Array {
-    /// Picks `n` random elements (partial Fisher-Yates shuffle approach)
+    /// Picks n random elements (partial Fisher-Yates shuffle approach)
     subscript (randomPick n: Int) -> [Element] {
         var copy = self
         for i in stride(from: count - 1, to: count - n - 1, by: -1) {

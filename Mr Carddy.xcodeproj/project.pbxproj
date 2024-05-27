@@ -48,6 +48,12 @@
 		41FF66682BF8D6DB00363C31 /* CardCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 41FF66662BF8D6DB00363C31 /* CardCollectionViewCell.swift */; };
 		41FF66692BF8D6DB00363C31 /* CardCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 41FF66672BF8D6DB00363C31 /* CardCollectionViewCell.xib */; };
 		41FF666B2BF8D9F100363C31 /* Card.swift in Sources */ = {isa = PBXBuildFile; fileRef = 41FF666A2BF8D9F100363C31 /* Card.swift */; };
+		81DFF2AF2C04B9740092E17F /* Click.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 81DFF2AE2C04B9740092E17F /* Click.mp3 */; };
+		81DFF2B12C04B97C0092E17F /* Winner.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 81DFF2B02C04B97C0092E17F /* Winner.mp3 */; };
+		81DFF2B32C04B9840092E17F /* gameOver.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 81DFF2B22C04B9840092E17F /* gameOver.mp3 */; };
+		81DFF2B52C04B9A20092E17F /* sahba.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 81DFF2B42C04B9A20092E17F /* sahba.mp3 */; };
+		81DFF2B82C04B9AD0092E17F /* Timer.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 81DFF2B62C04B9AD0092E17F /* Timer.mp3 */; };
+		81DFF2B92C04B9AD0092E17F /* buttons.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 81DFF2B72C04B9AD0092E17F /* buttons.mp3 */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -77,6 +83,12 @@
 		41FF66662BF8D6DB00363C31 /* CardCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardCollectionViewCell.swift; sourceTree = "<group>"; };
 		41FF66672BF8D6DB00363C31 /* CardCollectionViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CardCollectionViewCell.xib; sourceTree = "<group>"; };
 		41FF666A2BF8D9F100363C31 /* Card.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Card.swift; sourceTree = "<group>"; };
+		81DFF2AE2C04B9740092E17F /* Click.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = Click.mp3; sourceTree = "<group>"; };
+		81DFF2B02C04B97C0092E17F /* Winner.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = Winner.mp3; sourceTree = "<group>"; };
+		81DFF2B22C04B9840092E17F /* gameOver.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = gameOver.mp3; sourceTree = "<group>"; };
+		81DFF2B42C04B9A20092E17F /* sahba.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = sahba.mp3; sourceTree = "<group>"; };
+		81DFF2B62C04B9AD0092E17F /* Timer.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = Timer.mp3; sourceTree = "<group>"; };
+		81DFF2B72C04B9AD0092E17F /* buttons.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = buttons.mp3; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -141,6 +153,12 @@
 				412D94AF2BF3844C0076671F /* Info.plist */,
 				41D6C8B12BF4CD6400F799E6 /* GoogleService-Info.plist */,
 				414E3B772BF5F82900E14B03 /* LoginOrRegisterViewController.swift */,
+				81DFF2AE2C04B9740092E17F /* Click.mp3 */,
+				81DFF2B22C04B9840092E17F /* gameOver.mp3 */,
+				81DFF2B72C04B9AD0092E17F /* buttons.mp3 */,
+				81DFF2B62C04B9AD0092E17F /* Timer.mp3 */,
+				81DFF2B42C04B9A20092E17F /* sahba.mp3 */,
+				81DFF2B02C04B97C0092E17F /* Winner.mp3 */,
 			);
 			path = "Mr Carddy";
 			sourceTree = "<group>";
@@ -307,13 +325,19 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				81DFF2B82C04B9AD0092E17F /* Timer.mp3 in Resources */,
+				81DFF2B32C04B9840092E17F /* gameOver.mp3 in Resources */,
 				412D94AE2BF3844C0076671F /* LaunchScreen.storyboard in Resources */,
+				81DFF2B52C04B9A20092E17F /* sahba.mp3 in Resources */,
 				41F0ABC92BF8056000AF8528 /* FriendTableViewCell.xib in Resources */,
 				41D6C8B22BF4CD6400F799E6 /* GoogleService-Info.plist in Resources */,
+				81DFF2B92C04B9AD0092E17F /* buttons.mp3 in Resources */,
 				412D94AB2BF3844C0076671F /* Assets.xcassets in Resources */,
 				412D94A92BF3844A0076671F /* Main.storyboard in Resources */,
+				81DFF2AF2C04B9740092E17F /* Click.mp3 in Resources */,
 				41FF66692BF8D6DB00363C31 /* CardCollectionViewCell.xib in Resources */,
 				41D6C8E02BF4F39900F799E6 /* ImageCollectionViewCell.xib in Resources */,
+				81DFF2B12C04B97C0092E17F /* Winner.mp3 in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
