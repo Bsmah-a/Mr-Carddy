@@ -18,7 +18,7 @@ class GamesViewController: UIViewController {
     let playViewController = PlayViewController()
     
     @IBAction func joinGameTapped(_ sender: Any) {
-        playViewController.playAduio(name: "Click")
+        playViewController.playAudio(name: "Click")
         
         showInputDialog(title: "Join Game",
                         subtitle: "Please enter the code game number below.",

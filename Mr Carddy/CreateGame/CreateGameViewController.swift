@@ -40,13 +40,13 @@ class CreateGameViewController: UIViewController {
         coinsLabel.text = "\(coinsCount) coins"
         let minTapGestureRecognizer = UITapGestureRecognizer(target: self, action:
         #selector(minTapTapped(tapGestureRecognizer:)))
-        playViewController.playAduio(name: "Click")
+        playViewController.playAudio(name: "Click")
         min.isUserInteractionEnabled = true
         min.addGestureRecognizer(minTapGestureRecognizer)
         
         
         let plusTapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(plusTapTapped(tapGestureRecognizer:)))
-        playViewController.playAduio(name: "Click")
+        playViewController.playAudio(name: "Click")
         plus.isUserInteractionEnabled = true
         plus.addGestureRecognizer(plusTapGestureRecognizer)
 
@@ -76,7 +76,7 @@ class CreateGameViewController: UIViewController {
 //        }
     }
     @IBAction func createTapped(_ sender: Any) {
-        playViewController.playAduio(name: "Click")
+        playViewController.playAudio(name: "Click")
         if(codeLabel.text! != "code"){
             var players:[String:Player] =  [:]
             // this is new way to add player by his id

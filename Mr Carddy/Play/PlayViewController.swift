@@ -14,6 +14,8 @@ class PlayViewController: UIViewController {
     var sahbaCards:[Card] = []
     var game:Game?
     var player: AVAudioPlayer?
+    var audioPlayer: AVAudioPlayer?
+
     
 
     var cards : [Card] = []
@@ -115,15 +117,18 @@ class PlayViewController: UIViewController {
     var seconds = 40
     var myTimer: Timer?
     
+    //Close Game ...........
     @objc func closeTapped(tapGestureRecognizer: UITapGestureRecognizer)
     {
      
-        let alert = UIAlertController(title: "Alert", message: "Are you sure want to clase game?", preferredStyle: UIAlertController.Style.alert)
+        let alert = UIAlertController(title: "Alert", message: "Are you sure you want to leave this game?", preferredStyle: UIAlertController.Style.alert)
+        //timer stop
 
         // add an action (button)
-        alert.addAction(UIAlertAction(title: "No", style: UIAlertAction.Style.cancel, handler: nil))
-        alert.addAction(UIAlertAction(title: "Yes", style: .default, handler: { action in
+        alert.addAction(UIAlertAction(title: "STAY", style: UIAlertAction.Style.cancel, handler: nil))
+        alert.addAction(UIAlertAction(title: "LEAVE", style: .default, handler: { action in
             // make win for player and lose for other player
+            
             Database.database().reference().child("games").child(self.game!.id).child("winerId").setValue(self.player1!.uid)
         }))
         // show the alert
@@ -133,11 +138,7 @@ class PlayViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        // Do any additional setup after loading the view.
-        
-        //playAduio(name: "start")
-        
-        //
+       
         
         let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(closeTapped(tapGestureRecognizer:)))
         close.isUserInteractionEnabled = true
@@ -150,7 +151,8 @@ class PlayViewController: UIViewController {
         collectionView.register(UINib(nibName: "CardCollectionViewCell", bundle: nil), forCellWithReuseIdentifier: "CardCollectionViewCell")
         
         
-        Database.database().reference().child("games").child(game!.id).observe(.value) { dataSanpShot in
+        Database.database().reference().child("games").child(game!.id).observe(.value) { dataSanpShot, error in
+            
             guard let dic = dataSanpShot.value as? [String : AnyObject] else {return}
             self.game = Game(aDict: dic)
             
@@ -206,6 +208,7 @@ class PlayViewController: UIViewController {
                 let showAlert = UIAlertController(title: "You Did it", message: "Congratulations on your win \(self.game!.coins)" , preferredStyle: .alert)
               
                 let imageView = UIImageView(frame: CGRect(x: 10, y: 100, width: 90, height: 90))
+                self.playAudio(name: "Winner")
                 imageView.image = UIImage(named: "winner") // Your image here...
                 showAlert.view.addSubview(imageView)
                 let height = NSLayoutConstraint(item: showAlert.view, attribute: .height, relatedBy: .equal, toItem: nil, attribute: .notAnAttribute, multiplier: 1, constant: 320)
@@ -213,7 +216,7 @@ class PlayViewController: UIViewController {
                 showAlert.view.addConstraint(height)
                 showAlert.view.addConstraint(width)
                 showAlert.addAction(UIAlertAction(title: "OK", style: .default, handler: { action in
-                   // self.playViewController.playAduio(name: "Winner")
+                    
                     // add coins to me
                     GamesViewController.player!.coins  += self.game!.coins
                     Database.database().reference().child("players").child(GamesViewController.player!.uid).child("coins").setValue(GamesViewController.player!.coins)
@@ -224,7 +227,7 @@ class PlayViewController: UIViewController {
                 // show lose message
                 
                 let showAlert = UIAlertController(title: "Game Over", message: "The game is over and you have lost" , preferredStyle: .alert)
-                
+                self.playAudio(name: "gameOver")
                 let imageView = UIImageView(frame: CGRect(x: 10, y: 100, width: 90, height: 90))
                 imageView.image = UIImage(named: "loser") // Your image here...
                 showAlert.view.addSubview(imageView)
@@ -234,7 +237,7 @@ class PlayViewController: UIViewController {
                 showAlert.view.addConstraint(width)
                 showAlert.addAction(UIAlertAction(title: "OK", style: .cancel, handler: { action in
                     // your actions here...
-                    //self.playViewController.playAduio(name: "gameOver")
+                   
                     self.dismiss(animated: true)
                     
                 }))
@@ -249,19 +252,18 @@ class PlayViewController: UIViewController {
             
             //show count down
             if self.game!.curentPlayer == GamesViewController.player!.uid{
-                self.playAduio(name: "Timer")
-
-
+               
                 self.seconds = 40
-
+                self.playAudio(name: "Timer")
                 self.myTimer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { [weak self] timer in
                             self?.seconds -= 1
                             if self?.seconds == 0 {
-                                self?.showAlert(message: "Go!")
+                               // self?.showAlert(message: "Go!")
                                 self?.addWhenTimeFinish()
                                 self?.countDownMainPlayer.isHidden = true
                                 self?.player1CoundDown.isHidden = false
                                 self?.myTimer!.invalidate()
+                               // self?.stopAudio() // Stop the audio playback
                             } else if let seconds = self?.seconds {
                                 self?.countDownMainPlayer.text = "\(seconds)"
                             }
@@ -276,7 +278,7 @@ class PlayViewController: UIViewController {
                 self.myTimer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { [weak self] timer in
                             self?.seconds -= 1
                             if self?.seconds == 0 {
-                                self?.showAlert(message: "Go!")
+                                //self?.showAlert(message: "Go!")
                                 self?.addWhenTimeFinish()
                                 self?.countDownMainPlayer.isHidden = false
                                 self?.player1CoundDown.isHidden = true
@@ -404,14 +406,12 @@ class PlayViewController: UIViewController {
                 Database.database().reference().child("games").child(self.game!.id).child("players").child(GamesViewController.player!.uid).child("numberOfCardInGame").setValue(self.cards.count)
             }
             print("Cards Count == > \(cards.count)")
-            collectionView.reloadData()
-           
-            
-        }
+            collectionView.reloadData()}
+        self.stopAudio()
     }
     
     @IBAction func addTapped(_ sender: Any) {
-        playAduio(name: "sahba")
+        playAudio(name: "sahba")
         if(game!.curentPlayer == GamesViewController.player!.uid){
             cards.append(sahbaCards[Int.random(in: 1...150)])
             
@@ -423,9 +423,10 @@ class PlayViewController: UIViewController {
     }
    
 
+    //when press Done, check the card
     var specialCardCount = 0
     @IBAction func playTapped(_ sender: Any) {
-        playAduio(name: "buttons")
+        playAudio(name: "buttons")
         
         if self.game!.curentPlayer == GamesViewController.player!.uid{
             
@@ -453,7 +454,8 @@ class PlayViewController: UIViewController {
     }
     
     @IBAction func returnTapped(_ sender: Any) {
-        playAduio(name: "sahba")
+        playAudio(name: "button")
+        
         if(selectedCard != nil){
             cards.append(self.selectedCard!)
             selectedCard = nil
@@ -465,7 +467,24 @@ class PlayViewController: UIViewController {
         
         
     }
-    func playAduio(name:String){
+    
+    func playAudio(name: String) {
+        guard let url = Bundle.main.url(forResource: name, withExtension: "mp3") else {
+            return
+        }
+        
+        do {
+            audioPlayer = try AVAudioPlayer(contentsOf: url)
+            audioPlayer?.play()
+        } catch {
+            print("Error playing audio: \(error)")
+        }
+    }
+    func stopAudio() {
+        audioPlayer?.stop()
+        audioPlayer = nil
+    }
+    /*func playAduio(name:String){
         guard let url = Bundle.main.url(forResource: name, withExtension: "mp3") else { return }
 
             do {
@@ -485,7 +504,8 @@ class PlayViewController: UIViewController {
             } catch let error {
                 print(error.localizedDescription)
             }
-    }
+    }*/
+    
 
 }
 extension PlayViewController : UICollectionViewDelegate , UICollectionViewDataSource{
